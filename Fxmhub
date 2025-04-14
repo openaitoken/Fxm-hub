@@ -1,0 +1,227 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local parent = gethui()
+local RunService = game:GetService("RunService")
+
+RunService.Heartbeat:Connect(function()
+    if parent:FindFirstChild("Rayfield") then
+        parent.Rayfield.Loading.Banner.ImageTransparency = 1
+        return
+    end
+end)
+
+-- easy right :pensive:
+
+local Window = Rayfield:CreateWindow({
+   Name = "ろぷ泳 FXMhub ろぷ泳",
+   LoadingTitle = "main FXMhub",
+   LoadingSubtitle = "by FXM & Cxtilistic",
+   Theme = "DarkBlue",
+   ConfigurationSaving = {
+      Enabled = false,
+      FolderName = nil,
+      FileName = "Example Hub"
+   },
+   Discord = {
+      Enabled = false,
+      Invite = "noinvitelink",
+      RememberJoins = true
+   },
+   KeySystem = false,
+   KeySettings = {
+      Title = "key FXMhub",
+      Subtitle = "key configuration",
+      Note = "key at https://pastebin.com/raw/AtgzSP",
+      FileName = "YoutubeHubKey1",
+      SaveKey = false,
+      GrabKeyFromSite = true,
+      Key = {"https://pastebin.com/raw/AtgzSPWK"}
+   }
+})
+
+local MainTab = Window:CreateTab("Home", 7539983773)
+local MainSection = MainTab:CreateSection("Main")
+
+Rayfield:Notify({
+   Title = "script successfully executed",
+   Content = "FXMhub   loaded",
+   Duration = 5,
+   Image = 85502241059648,
+   Actions = {
+      Ignore = {
+         Name = "mhm",
+         Callback = function()
+         print("the user tapped mhm")
+      end
+   },
+},
+})
+
+local Button = MainTab:CreateButton({
+   Name = "Infinite Jump Toggle",
+   Callback = function()
+_G.infinjump = not _G.infinjump
+
+if _G.infinJumpStarted == nil then
+	_G.infinJumpStarted = true
+	
+	game.StarterGui:SetCore("SendNotification", {Title="FXM main"; Text="Infinite Jump Activated!"; Duration=5;})
+
+	local plr = game:GetService('Players').LocalPlayer
+	local m = plr:GetMouse()
+	m.KeyDown:connect(function(k)
+		if _G.infinjump then
+			if k:byte() == 32 then
+			humanoid = game:GetService'Players'.LocalPlayer.Character:FindFirstChildOfClass('Humanoid')
+			humanoid:ChangeState('Jumping')
+			wait()
+			humanoid:ChangeState('Seated')
+			end
+		end
+	end)
+end
+   end,
+})
+
+local Slider = MainTab:CreateSlider({
+   Name = "WalkSpeed Slider",
+   Range = {1, 1000},
+   Increment = 1,
+   Suffix = "Speed",
+   CurrentValue = 16,
+   Flag = "sliderws",
+   Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = (Value)
+   end,
+})
+
+local Input = MainTab:CreateInput({
+   Name = "Walkspeed",
+   PlaceholderText = "1-1000",
+   RemoveTextAfterFocusLost = true,
+   Callback = function(Text)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = (Text)
+   end,
+})
+
+local Slider = MainTab:CreateSlider({
+   Name = "JumpPower Slider",
+   Range = {1, 1000},
+   Increment = 1,
+   Suffix = "Speed",
+   CurrentValue = 16,
+   Flag = "sliderjp",
+   Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = (Value)
+   end,
+})
+
+local Input = MainTab:CreateInput({
+   Name = "Jump Power",
+   PlaceholderText = "1-1000",
+   RemoveTextAfterFocusLost = true,
+   Callback = function(Text)
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = (Text)
+   end,
+})
+
+local OtherSection = MainTab:CreateSection("Other")
+
+local Button = MainTab:CreateButton({
+   Name = "Kill Player",
+   Callback = function()
+      game.Players.LocalPlayer.Character.Humanoid.Health = 0
+   end,
+})
+
+local Toggle = MainTab:CreateToggle({
+   Name = "God Mode",
+   CurrentValue = false,
+   Flag = "GodToggle",
+   Callback = function(Value)
+       local player = game.Players.LocalPlayer
+       local char = player.Character or player.CharacterAdded:Wait()
+       local hum = char:FindFirstChildOfClass("Humanoid")
+       
+       if hum then
+           if Value then
+               hum.MaxHealth = 1e+308
+               hum.Health = hum.MaxHealth
+           else
+               hum.MaxHealth = 100
+               hum.Health = 100
+           end
+       end
+   end
+})
+
+local TPTab = Window:CreateTab("Others", 13451653612)
+
+local Input = TPTab:CreateInput({
+   Name = "Teleport Input",
+   CurrentValue = "",
+   PlaceholderText = "Enter Username or Display Name",
+   RemoveTextAfterFocusLost = false,
+   Flag = "Input1",
+   Callback = function(Text)
+       for _, player in pairs(game.Players:GetPlayers()) do
+           if player.Name:sub(1, #Text):lower() == Text:lower() or player.DisplayName:sub(1, #Text):lower() == Text:lower() then
+               local targetCharacter = player.Character
+               if targetCharacter and targetCharacter:FindFirstChild("HumanoidRootPart") then
+                   game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(targetCharacter.HumanoidRootPart.CFrame)
+                   break
+               end
+           end
+       end
+   end,
+})
+
+local Lighting = game:GetService("Lighting")
+local originalSettings = {
+    Brightness = Lighting.Brightness,
+    ClockTime = Lighting.ClockTime,
+    FogEnd = Lighting.FogEnd,
+    Ambient = Lighting.Ambient
+}
+
+local Toggle = TPTab:CreateToggle({
+    Name = "FullBright",
+    CurrentValue = false,
+    Flag = "FullBrightToggle",
+    Callback = function(Value)
+        if Value then
+            Lighting.Brightness = 2
+            Lighting.ClockTime = 14
+            Lighting.FogEnd = 100000
+            Lighting.Ambient = Color3.new(1, 1, 1)
+        else
+            Lighting.Brightness = originalSettings.Brightness
+            Lighting.ClockTime = originalSettings.ClockTime
+            Lighting.FogEnd = originalSettings.FogEnd
+            Lighting.Ambient = originalSettings.Ambient
+        end
+    end
+})
+
+local ScriptsTab = Window:CreateTab("Scripts", 94638125071676)
+
+local Button = ScriptsTab:CreateButton({
+   Name = "Infinite Yield",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+   end,
+})
+
+local Button = ScriptsTab:CreateButton({
+   Name = "Dex Explorer",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))()
+   end,
+})
+
+local Button = ScriptsTab:CreateButton({
+   Name = "Aimbot GUI",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/HogRider123/Astralis/refs/heads/main/Aim"))()
+   end,
+})
